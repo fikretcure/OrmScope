@@ -10,8 +10,9 @@ use Illuminate\Support\Facades\DB;
 class UserController extends Controller
 {
 
-    public function get(){
-        return User::yearbirth()->with(["position","perfection"])->get();
+    public function get()
+    {
+        return User::yearbirth()->with(["position", "perfection"])->get();
     }
 
 
@@ -19,7 +20,9 @@ class UserController extends Controller
     {
         return User::withWhereHas('position', function ($query) {
             $query->where('name', 'Full');
-        })->get();
+        })
+            ->yearbirth()
+            ->get();
     }
 
     public function getJuniorInPerfectionAndAges($age1, $age2)
@@ -29,14 +32,17 @@ class UserController extends Controller
         })
             ->where('age', ">", $age1)
             ->where('age', "<", $age2)
+            ->yearbirth()
             ->get();
     }
 
     public function getCityAndPositionAndPerfectionAndAges($age1, $age2)
     {
-        return User::select(DB::raw('count(*) as count, city,positions_id,perfections_id'))
+        return User::
+        with(["position", "perfection"])
+            ->select(DB::raw('count(*) as count, city,positions_id,perfections_id'))
             ->groupBy('city', "positions_id", "perfections_id")
-            ->whereBetween("age",[$age1,$age2])
+            ->whereBetween("age", [$age1, $age2])
             ->get();
     }
 }

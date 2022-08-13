@@ -18,10 +18,10 @@ return new class extends Migration {
             $table->string('last_name')->nullable();
             $table->string('city')->nullable();
             $table->integer('age')->nullable();
-            $table->integer('positions_id')->unsigned();
-            $table->integer('perfections_id')->unsigned();
-         //  $table->foreign('positions_id')->references('id')->on('positions');
-         //  $table->foreign('perfections_id')->references('id')->on('perfections');
+            $table->unsignedBigInteger('positions_id');
+            $table->unsignedBigInteger('perfections_id');
+            $table->foreign('positions_id')->references('id')->on('positions');
+            $table->foreign('perfections_id')->references('id')->on('perfections');
             $table->timestamps();
         });
     }
